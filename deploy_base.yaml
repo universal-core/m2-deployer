@@ -1,0 +1,266 @@
+metadata:
+  create_dirs:
+    - share/bin
+    - share/data
+    - share/locale/italy
+    - share/conf
+  touch: []
+  install_script:  install.sh
+
+globals:
+  prod: true
+  root_dir: /
+  connection.ip: 172.20.0.22
+  connection.proxy_ip: 172.18.16.1
+  lrdb.enabled: true
+
+cores:
+  db:
+    renames: 
+      config_template: CONFIG
+    values:
+      hostname: db
+      path: db
+      table_postfix: ""
+      port: 23000
+      sleep_ms: 10
+      heart_fps: 10
+      hash_player_life_sec: 600
+      backup_limit_sec: 3600
+      player_id_start: 100
+      player_delete_level_max: 100
+      player_delete_level_min: 1
+      player_delete_check: 1
+      item_id_range:
+        - 2000000000
+        - 2100000000
+      mob_proto_db_load: 1
+      lrdb.port: 10100
+      luna:
+        bridge.libs_path: ./locale/italy/libs
+        forge.init_script: ./locale/italy/libs/forge_extensions/db_init.lua
+        forge.path: ./locale/italy/quest/forge
+
+  auth:
+    renames: 
+      config_template: server.xml
+    values:
+      path: auth
+      channel: 0
+      hostname: auth
+      connection.port: 10200
+      connection.p2p_port: 17001
+      auth.enabled: 1
+  
+  {{ range $i := (seq 0 $.channels) }}
+  {{ $ch := add $i 1 }}
+  game1-ch{{ $ch }}:
+    renames: 
+      config_template: server.xml
+    values:
+      path: channel{{ $ch }}/game1
+      channel: {{ $ch }}
+      hostname: game1-ch{{ $ch }}
+      connection:
+        port:  {{ add 10201 (mul $i 200) }}
+        p2p_port:  {{ add 17300 (mul $i 200) }}
+      lrdb.port: {{ add 10101 (mul $ch 10) }}
+      mark.enabled: {{ if eq $ch 1 }} 1 {{ else }} 0 {{ end }}
+      mark.min_level: {{ if eq $ch 1 }} 4 {{ else }} 0 {{ end }}
+      intel.is_master: {{ if eq $ch 1 }} 1 {{ else }} 0 {{ end }}
+      maps_allowed:
+        - 61
+        - 63
+        - 64
+        - 67
+        - 68
+        - 71
+        - 73
+        - 172
+        - 100
+        - 167
+        - 220
+
+  game2-ch{{ $ch }}:
+    renames: 
+      config_template: server.xml
+    values:
+      path: channel{{  $ch }}/game2
+      channel: {{  $ch }}
+      hostname: game2-ch{{  $ch }}
+      connection:
+        port: {{ add 10202 (mul $i 200) }}
+        p2p_port: {{ add 17301 (mul $i 200) }}
+      lrdb.port: {{ add 10102 (mul $ch 10) }}
+      maps_allowed:
+        - 132
+        - 208
+        - 209
+        - 210
+        - 246
+        - 249
+        - 221
+        - 90
+        - 91
+        - 92
+        - 93
+        - 94
+        - 199
+        - 200
+        - 201
+        - 203
+        - 202
+        - 231
+        - 237
+
+  game3-ch{{ $ch }}:
+    renames: 
+      config_template: server.xml
+    values:
+      path: channel{{ $ch }}/game3
+      channel: {{ $ch }}
+      hostname:  game3-ch{{ $ch }}
+      connection:
+        port: {{ add 10203 (mul $i 200) }}
+        p2p_port: {{ add 17302 (mul $i 200) }}
+      lrdb.port: {{ add 10103 (mul $ch 10) }}
+      maps_allowed:
+        - 135
+        - 170
+        - 171
+        - 204
+        - 205
+        - 206
+        - 207
+
+  game4-ch{{ $ch }}:
+    renames: 
+      config_template: server.xml
+    values:
+      path: channel{{ $ch }}/game4
+      channel: {{ $ch }}
+      hostname: game4-ch{{ $ch }}
+      connection:
+        port: {{ add 10204 (mul $i 200) }}
+        p2p_port: {{ add 17303 (mul $i 200) }}
+      lrdb.port: {{ add 10104 (mul $ch 10) }}
+      maps_allowed:
+        - 65
+        - 66
+        - 69
+        - 129
+        - 130
+        - 133
+        - 134
+        - 211
+        - 232
+        - 241
+        - 242
+        - 247
+        - 248
+        - 250
+        - 251
+        - 252
+        - 253
+        - 254
+
+  game5-ch{{ $ch }}:
+    renames: 
+      config_template: server.xml
+    values:
+      path: channel{{ $ch }}/game5
+      channel:  {{ $ch }}
+      hostname: game5-ch{{ $ch }}
+      connection:
+        port: {{ add 10205 (mul $i 200) }}
+        p2p_port: {{ add 17304 (mul $i 200) }}
+      lrdb.port: {{ add 10105 (mul $ch 10) }}
+      maps_allowed:
+        - 225
+        - 226
+        - 227
+        - 238
+  {{ end }}
+  
+  game98:
+    renames: 
+      config_template: server.xml
+    values:
+      path: game98
+      channel: 98
+      hostname: game98
+      connection.port: 10998
+      connection.p2p_port: 17998
+      lrdb.port: 10198
+      decorum.is_master: 1
+      queue.is_master: 1
+      is_master.is_master: 1
+      maps_allowed:
+        - 81
+        - 101
+        - 102
+        - 103
+        - 110
+        - 111
+        - 215
+        - 216
+        - 217
+        - 244
+        - 245
+
+  game99:
+    renames: 
+      config_template: server.xml
+    values:
+      path: game99
+      channel: 99
+      hostname: game99
+      connection.port: 10999
+      connection.p2p_port: 17999
+      lrdb.port: 10199
+      maps_allowed:
+        - 213
+        - 118
+        - 119
+        - 120
+        - 121
+        - 122
+        - 123
+        - 124
+        - 125
+        - 181
+        - 182
+        - 183
+        - 218
+        - 230
+
+additional_folders:
+  share:
+    out_path: share/conf
+    values:
+      test_server: true
+      version.enabled: false
+      version.timestamp: 0
+      version.filename: ""
+      logs.packet_enabled: 0
+      cycles.passes_per_sec: 25
+      cycles.event.save_seconds: 60
+      cycles.event.ping_seconds: 180
+      player.view_range: 20000
+      player.view_range_bonus: 500
+      player.pk_protect_level: 15
+      player.max_level: 150
+      player.empire_whisper: 0
+      player.level_exp_discouragement: 168
+      player.approve_huuid: true
+      player.hide_gm: true
+      player.auth_only_gm: false
+      player.protect_normal_player: false
+      luna:
+        bridge.libs_path: ./locale/italy/libs
+        forge.init_script: ./locale/italy/libs/forge_extensions/game_init.lua
+        forge.path: ./locale/italy/quest/forge
+
+  iptables:
+    out_path: iptables
+    values: {}

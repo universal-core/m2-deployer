@@ -1,0 +1,14 @@
+{{- range $index, $core := .globals.__out__cores }}
+{{ if $core.connection.port }}
+{{ if ne $core.hostname "db" }}sudo iptables -I INPUT -p tcp --dport {{ $core.connection.port }} -j ACCEPT
+{{ else }}sudo iptables -I INPUT -p tcp --dport {{ $core.connection.port }} -j DROP
+sudo iptables -I INPUT -s 127.0.0.1 -p tcp --dport {{ $core.connection.port }} -j ACCEPT
+{{ end }}
+{{ end }}
+{{ if $core.connection.p2p_port }}sudo iptables -I INPUT -p tcp --dport {{ $core.connection.p2p_port }} -j DROP
+sudo iptables -I INPUT -s 127.0.0.1 -p tcp --dport {{ $core.connection.p2p_port }} -j ACCEPT
+sudo iptables -I INPUT -s {{$core.connection.ip}} -p tcp --dport {{ $core.connection.p2p_port }} -j ACCEPT{{ end }}
+{{- end }}
+
+sudo sh -c "iptables-save > /etc/iptables/rules.v4"
+sudo sh -c "ip6tables-save > /etc/iptables/rules.v6"

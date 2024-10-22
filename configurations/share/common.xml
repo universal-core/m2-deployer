@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+	<!-- DATABASE CONFIGURATION -->
+	<database>
+		<port>{{ .secret.dbcache.port }}</port>
+		<ip>{{ .secret.dbcache.host }}</ip>
+	</database>
+	
+	<!-- ADMIN CONFIGURATION -->
+	<admin>
+		<password>{{ .secret.admin.password }}</password>
+		<allowed_ips>{{range .secret.admin.allowed_ips}}
+        	<allowed_ip>{{ . }}</allowed_ip>{{end}}
+		</allowed_ips>
+	</admin>
+	
+	<type>
+		<test_server>{{ .test_server }}</test_server>
+	</type>
+	
+	<!-- VERSION CONFIGURATION -->
+	<version>
+		<enabled>{{ .version.enabled }}</enabled>
+		<timestamp>{{ .version.timestamp }}</timestamp>
+		<filename>{{ .version.filename }}</filename>
+	</version>
+	
+	<!-- LOGS CONFIGURATION -->
+	<logs>
+		<packet_enabled>{{ .logs.packet_enabled }}</packet_enabled>
+	</logs>
+	
+	<!-- CYCLES CONFIGURATION -->
+	<cycles>
+		<passes_per_sec>{{ .cycles.passes_per_sec }}</passes_per_sec>
+		<event>
+			<save_seconds>{{ .cycles.event.save_seconds }}</save_seconds>
+			<ping_seconds>{{ .cycles.event.ping_seconds }}</ping_seconds>
+		</event>
+	</cycles>
+	
+	<!-- PLAYER CONFIGURATION -->
+	<player>
+		<view_range>{{ .player.view_range }}</view_range>
+		<view_range_bonus>{{ .player.view_range_bonus }}</view_range_bonus>
+		<pk_protect_level>{{ .player.pk_protect_level }}</pk_protect_level>
+		<max_level>{{ .player.max_level }}</max_level>
+		<empire_whisper>{{ .player.empire_whisper }}</empire_whisper>
+		<level_exp_discouragement>{{ .player.level_exp_discouragement }}</level_exp_discouragement>
+		<approve_huuid>{{ .player.approve_huuid }}</approve_huuid>
+		<hide_gm>{{ .player.hide_gm }}</hide_gm>
+		<auth_only_gm>{{ .player.auth_only_gm }}</auth_only_gm>
+		<protect_normal_player>{{ .player.protect_normal_player }}</protect_normal_player>
+	</player>
+
+	<luna>
+		<forge>
+			<base_directory>{{ .luna.forge.path }}</base_directory>
+			<init_script>{{ .luna.forge.init_script }}</init_script>
+		</forge>
+		<bridge>
+			<libs_path>{{ .luna.bridge.libs_path }}</libs_path>
+		</bridge>
+	</luna>
+	
+	<!-- SQL CONFIGURATION -->
+	<sql>
+		<account>
+			<username>{{ .secret.database.username }}</username>
+			<password>{{ .secret.database.password }}</password>
+			<port>{{ .secret.database.port }}</port>
+			<ip>{{ .secret.database.host }}</ip>
+			<db>{{ .secret.database.account_db }}</db>
+		</account>
+		<player>
+			<username>{{ .secret.database.username }}</username>
+			<password>{{ .secret.database.password }}</password>
+			<port>{{ .secret.database.port }}</port>
+			<ip>{{ .secret.database.host }}</ip>
+			<db>{{ .secret.database.player_db }}</db>
+		</player>
+		<common>
+			<username>{{ .secret.database.username }}</username>
+			<password>{{ .secret.database.password }}</password>
+			<port>{{ .secret.database.port }}</port>
+			<ip>{{ .secret.database.host }}</ip>
+			<db>{{ .secret.database.common_db }}</db>
+		</common>
+		<log>
+			<username>{{ .secret.database.username }}</username>
+			<password>{{ .secret.database.password }}</password>
+			<port>{{ .secret.database.port }}</port>
+			<ip>{{ .secret.database.host }}</ip>
+			<db>{{ .secret.database.log_db }}</db>
+		</log>
+		<stat>
+			<username>{{ .secret.database.username }}</username>
+			<password>{{ .secret.database.password }}</password>
+			<port>{{ .secret.database.port }}</port>
+			<ip>{{ .secret.database.host }}</ip>
+			<db>{{ .secret.database.stat_db }}</db>
+		</stat>		
+	</sql>
+</server>

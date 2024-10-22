@@ -1,0 +1,5 @@
+globals:
+  prod: false
+  root_dir: /app
+  connection.ip: 172.20.0.22
+  connection.proxy_ip: 172.18.16.1

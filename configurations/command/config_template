@@ -1,0 +1,98 @@
+{{/* ------------------------------------ DB CONFIG */}}
+{{ if eq .hostname "db" }}
+WELCOME_MSG = "DB Server has been started"
+
+SQL_ACCOUNT = "{{ .secret.db.host }} {{ .secret.db.account_db }} {{ .secret.db.username }} {{ .secret.db.password }} {{ .secret.db.port }}"
+SQL_PLAYER = "{{ .secret.db.host }} {{ .secret.db.player_db }} {{ .secret.db.username }} {{ .secret.db.password }} {{ .secret.db.port }}"
+SQL_COMMON = "{{ .secret.db.host }} {{ .secret.db.common_db }} {{ .secret.db.username }} {{ .secret.db.password }} {{ .secret.db.port }}"
+SQL_LOG = "{{ .secret.db.host }} {{ .secret.db.log_db }} {{ .secret.db.username }} {{ .secret.db.password }} {{ .secret.db.port }}"
+SQL_STAT = "{{ .secret.db.host }} {{ .secret.db.stat_db }} {{ .secret.db.username }} {{ .secret.db.password }} {{ .secret.db.port }}"
+
+TABLE_POSTFIX = {{ or .table_postfix "\"\"" }}
+
+BIND_PORT                   = {{ .port }}
+DB_SLEEP_MSEC               = {{ .sleep_ms }}
+CLIENT_HEART_FPS            = {{ .heart_fps }}
+HASH_PLAYER_LIFE_SEC        = {{ .hash_player_life_sec }}
+BACKUP_LIMIT_SEC            = {{ .backup_limit_sec }}
+
+PLAYER_ID_START                     = {{ .player_id_start }}
+PLAYER_DELETE_LEVEL_LIMIT           = {{ .player_delete_level_max }}
+PLAYER_DELETE_LEVEL_LIMIT_LOWER     = {{ .player_delete_level_min }}
+PLAYER_DELETE_CHECK_SIMPLE          = {{ .player_delete_check }}
+
+ITEM_ID_RANGE = {{ index .item_id_range 0 }} {{ index .item_id_range 1 }}
+
+MIN_LENGTH_OF_SOCIAL_ID	= 6
+
+#NAME_COLUMN = "gb2312name"
+#LOCALE = "gb2312"
+SIMPLE_SOCIALID = 1
+MOB_PROTO_DB_LOAD = 1
+
+LRDB_ENABLED = {{ or .lrdb.enabled false }}
+LRDB_PORT = {{ or .lrdb.port 0 }}
+
+LUNA_FORGE_PATH = {{ .luna.forge.path }}
+LUNA_FORGE_INIT = {{ .luna.forge.init_script }}
+LUNA_BRIDGE_LIB_PATH = {{ .luna.bridge.libs_path }}
+
+{{/* ------------------------------------ GAMES CONFIG */}}
+{{ else }}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+	<!-- MAIN CONFIGURATION -->
+	<channel>{{ .channel }}</channel>
+	<hostname>{{ .hostname }}</hostname>
+	
+	<!-- CONNECTION CONFIGURATION -->
+	<bind_ip>{{ .connection.ip }}</bind_ip>
+	{{ if .connection.proxy_ip }}<proxy_ip>{{ .connection.proxy_ip }}</proxy_ip>
+	{{ end }}
+	<port>{{ .connection.port }}</port>
+	<p2p_port>{{ .connection.p2p_port }}</p2p_port>
+	
+    <!-- AUTH CONFIGURATION -->
+	<auth>
+		<enabled>{{ or .auth.enabled 0 }}</enabled>
+	</auth>
+
+	<!-- LRDB CONFIGURATION -->
+	<lrdb>
+		<enabled>{{ or .lrdb.enabled false }}</enabled>
+		<port>{{ or .lrdb.port 0 }}</port>
+	</lrdb>
+
+	<!-- DECORUM CONFIGURATION -->
+	<decorum>
+		<is_master>{{ or .decorum.is_master 0 }}</is_master>
+	</decorum>
+
+    <!-- QUEUE CONFIGURATION -->
+	<queue>
+		<is_master>{{ or .queue.is_master 0 }}</is_master>
+	</queue>	
+	
+	<!-- MASTER_HUNT CONFIGURATION -->
+	<master_hunt>
+		<is_master>{{ or .master_hunt.is_master 0 }}</is_master>
+	</master_hunt>
+
+	<!-- MARK SERVER CONFIGURATION -->
+	<mark>
+		<enabled>{{ or .mark.enabled 0 }}</enabled>
+		<min_level>{{ or .mark.min_level 0 }}</min_level>
+	</mark>
+
+	<!-- INTEL CONFIGURATION -->
+	<intel>
+		<is_master>{{ or .intel.is_master 0 }}</is_master>
+	</intel>
+	
+	<!-- MAPS CONFIGURATION -->
+	<maps_allowed>{{range .maps_allowed}}
+        <idx>{{ . }}</idx>{{end}}
+	</maps_allowed>
+</server>
+{{ end }}
